@@ -17,8 +17,8 @@ jobs:
       with:
         dotnet-version: 3.1.101 
     - name: Install dependencies
-      run: dotnet restore Backend\Nycflights-Backend
+      run: dotnet restore Nycflights-Project\Nycflights-Project
     - name: Build
-      run: dotnet build Backend\Nycflights-Backend\Nycflights-Backend.sln --configuration Release --no-restore
+      run: dotnet build Nycflights-Project\Nycflights-Project\Nycflights-Project.sln --configuration Release --no-restore
     - name: Test
       run: dotnet test Backend\Nycflights-Backend\Nycflights-Backend-Test\Nycflights-Backend-Test.csproj --no-restore --verbosity normal
