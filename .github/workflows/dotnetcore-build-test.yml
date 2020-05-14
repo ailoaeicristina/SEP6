@@ -17,7 +17,7 @@ jobs:
       with:
         dotnet-version: 3.1.101 
     - name: Install dependencies
-      run: dotnet restore Nycflights-Project\Nycflights-Project
+      run: dotnet restore Nycflights-Project
     - name: Build
       run: dotnet build Nycflights-Project\Nycflights-Project.sln --configuration Release --no-restore
     - name: Test
