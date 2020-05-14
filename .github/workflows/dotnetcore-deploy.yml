@@ -2,7 +2,7 @@ name: .NET Core Deploy to App Engine
 
 on:
   push:
-    branches: master, Project-setup
+    branches: '*'
     
 jobs:
   build:
