@@ -21,4 +21,4 @@ jobs:
     - name: Build
       run: dotnet build Nycflights-Project\Nycflights-Project.sln --configuration Release --no-restore
     - name: Test
-      run: dotnet test Backend\Nycflights-Backend\Nycflights-Backend-Test\Nycflights-Backend-Test.csproj --no-restore --verbosity normal
+      run: dotnet test Nycflights-Project\Nycflights-Project-Test\Nycflights-Project-Test.csproj --no-restore --verbosity normal
