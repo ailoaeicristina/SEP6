@@ -1,1 +1,9 @@
 ﻿runtime: aspnetcore
+env: flex
+
+skip_files:
+- ^README\..*
+- \.gitignore
+- ^\.git/.*
+- ^(.*/)?.*~
+- ClientApp/node_modules/
