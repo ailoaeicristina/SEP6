@@ -20,6 +20,9 @@ namespace Nycflights_Project.Models
 
             modelBuilder.Entity<Weather>()
                 .HasKey(w => new { w.Origin, w.Time_hour });
+
+            modelBuilder.Entity<Flight>()
+                .Property(f => f.FlightNumber).HasColumnName("Flight");
         }
     }
 }
