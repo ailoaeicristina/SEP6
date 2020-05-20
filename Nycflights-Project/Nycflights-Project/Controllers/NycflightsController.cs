@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Nycflights_Project.Models;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,6 +14,7 @@ namespace Nycflights_Project.Controllers
             { {1, "Jan" }, {2, "Feb"}, {3, "Mar"},  {4, "Apr"},  {5, "May"},  {6, "Jun"},
                 {7, "Jul"},  {8, "Aug"},  {9, "Sep"},  {10, "Oct"},  {11, "Nov"},  {12, "Dec"}};
 
+        #region Flights per month
         // GET: api/Nycflights/FlightsPerMonth
         [HttpGet("[action]")]
         public Dictionary<string, int> FlightsPerMonth()
@@ -51,7 +53,9 @@ namespace Nycflights_Project.Controllers
             return context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("LGA")).Select(f => f.Month).ToList()
                 .GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
+        #endregion
 
+        #region Top ten destinations
         // GET: api/Nycflights/FlightsToTopTenDestinations
         [HttpGet("[action]")]
         public Dictionary<string?, int> FlightsToTopTenDestinations()
@@ -118,5 +122,33 @@ namespace Nycflights_Project.Controllers
 
             return flightsToTopTenDestinationsFromLGA;
         }
+        #endregion
+
+        // GET: api/Nycflights/MeanAirtimeForOrigins
+        [HttpGet("[action]")]
+        public Dictionary<string, string> MeanAirtimeForOrigins()
+        {
+            var context = new Nycflights13DBContext();
+
+            double? averageAirtimeJFK = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("JFK")).Select(f => f.Air_time).ToList().Average();
+            double? averageAirtimeEWR = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("EWR")).Select(f => f.Air_time).ToList().Average();
+            double? averageAirtimeLGA = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("LGA")).Select(f => f.Air_time).ToList().Average();
+
+            TimeSpan tavgAirtimeJFK = new TimeSpan(), tavgAirtimeEWR = new TimeSpan(), tavgAirtimeLGA = new TimeSpan();
+
+            if(averageAirtimeJFK != null)
+                tavgAirtimeJFK = TimeSpan.FromMinutes((double)averageAirtimeJFK);
+
+            if (averageAirtimeEWR != null)
+                tavgAirtimeEWR = TimeSpan.FromMinutes((double)averageAirtimeEWR);
+
+            if (averageAirtimeLGA != null)
+                tavgAirtimeLGA = TimeSpan.FromMinutes((double)averageAirtimeLGA);
+
+            return new Dictionary<string, string>() { { "JFK", tavgAirtimeJFK.ToString("hh\\:mm\\:ss") },
+                { "EWR", tavgAirtimeEWR.ToString("hh\\:mm\\:ss") },
+                { "LGA", tavgAirtimeLGA.ToString("hh\\:mm\\:ss") } };
+        }
+
     }
 }
