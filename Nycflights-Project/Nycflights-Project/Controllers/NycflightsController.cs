@@ -150,5 +150,13 @@ namespace Nycflights_Project.Controllers
                 { "LGA", tavgAirtimeLGA.ToString("hh\\:mm\\:ss") } };
         }
 
+        // GET: api/Nycflights/WeatherObservationsForOrigins
+        [HttpGet("[action]")]
+        public Dictionary<string?, int> WeatherObservationsForOrigins()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Select(w => w.Origin).ToList().GroupBy(o => o).ToDictionary(g => g.Key, g => g.Count());
+        }
     }
 }
