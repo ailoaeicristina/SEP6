@@ -15,7 +15,7 @@ namespace Nycflights_Project.Controllers
                 {7, "Jul"},  {8, "Aug"},  {9, "Sep"},  {10, "Oct"},  {11, "Nov"},  {12, "Dec"}};
 
         #region Flights per month
-        // GET: api/Nycflights/FlightsPerMonth
+        //1. GET: api/Nycflights/FlightsPerMonth
         [HttpGet("[action]")]
         public Dictionary<string, int> FlightsPerMonth()
         {
@@ -24,7 +24,7 @@ namespace Nycflights_Project.Controllers
             return context.Flights.Select(f => f.Month).ToList().GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
 
-        // GET: api/Nycflights/FlightsPerMonthForJFK
+        //2.1. GET: api/Nycflights/FlightsPerMonthForJFK
         [HttpGet("[action]")]
         public Dictionary<string, int> FlightsPerMonthForJFK()
         {
@@ -34,7 +34,7 @@ namespace Nycflights_Project.Controllers
                 .GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
 
-        // GET: api/Nycflights/FlightsPerMonthForEWR
+        //2.2. GET: api/Nycflights/FlightsPerMonthForEWR
         [HttpGet("[action]")]
         public Dictionary<string, int> FlightsPerMonthForEWR()
         {
@@ -44,7 +44,7 @@ namespace Nycflights_Project.Controllers
                 .GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
 
-        // GET: api/Nycflights/FlightsPerMonthForLGA
+        //2.3. GET: api/Nycflights/FlightsPerMonthForLGA
         [HttpGet("[action]")]
         public Dictionary<string, int> FlightsPerMonthForLGA()
         {
@@ -56,7 +56,7 @@ namespace Nycflights_Project.Controllers
         #endregion
 
         #region Top ten destinations
-        // GET: api/Nycflights/FlightsToTopTenDestinations
+        //3.1. GET: api/Nycflights/FlightsToTopTenDestinations
         [HttpGet("[action]")]
         public Dictionary<string?, int> FlightsToTopTenDestinations()
         {
@@ -66,7 +66,7 @@ namespace Nycflights_Project.Controllers
                 .OrderByDescending(val => val.Value).Take(10).ToDictionary(g => g.Key, g => g.Value);
         }
 
-        // GET: api/Nycflights/FlightsToTopTenDestinationsFromJFK
+        //3.2. GET: api/Nycflights/FlightsToTopTenDestinationsFromJFK
         [HttpGet("[action]")]
         public Dictionary<string, int> FlightsToTopTenDestinationsFromJFK()
         {
@@ -85,7 +85,7 @@ namespace Nycflights_Project.Controllers
             return flightsToTopTenDestinationsFromJFK;
         }
 
-        // GET: api/Nycflights/FlightsToTopTenDestinationsFromEWR
+        //3.3. GET: api/Nycflights/FlightsToTopTenDestinationsFromEWR
         [HttpGet("[action]")]
         public Dictionary<string, int> FlightsToTopTenDestinationsFromEWR()
         {
@@ -104,7 +104,7 @@ namespace Nycflights_Project.Controllers
             return flightsToTopTenDestinationsFromEWR;
         }
 
-        // GET: api/Nycflights/FlightsToTopTenDestinationsFromLGA
+        //3.4. GET: api/Nycflights/FlightsToTopTenDestinationsFromLGA
         [HttpGet("[action]")]
         public Dictionary<string, int> FlightsToTopTenDestinationsFromLGA()
         {
@@ -124,7 +124,7 @@ namespace Nycflights_Project.Controllers
         }
         #endregion
 
-        // GET: api/Nycflights/MeanAirtimeForOrigins
+        //4. GET: api/Nycflights/MeanAirtimeForOrigins
         [HttpGet("[action]")]
         public Dictionary<string, string> MeanAirtimeForOrigins()
         {
@@ -150,7 +150,7 @@ namespace Nycflights_Project.Controllers
                 { "LGA", tavgAirtimeLGA.ToString("hh\\:mm\\:ss") } };
         }
 
-        // GET: api/Nycflights/WeatherObservationsForOrigins
+        //5. GET: api/Nycflights/WeatherObservationsForOrigins
         [HttpGet("[action]")]
         public Dictionary<string?, int> WeatherObservationsForOrigins()
         {
@@ -158,5 +158,26 @@ namespace Nycflights_Project.Controllers
 
             return context.Weather.Select(w => w.Origin).ToList().GroupBy(o => o).ToDictionary(g => g.Key, g => g.Count());
         }
-    }
+
+
+
+        //7. GET: api/Nycflights/TempretaureInCelsiusForJFK
+        [HttpGet("[action]")]
+        public Dictionary<string, string> TempretaureInCelsiusForJFK()
+        {
+            var context = new Nycflights13DBContext();
+
+            float? TemInCelsiusForJFK = context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("JFK")).Select(w => (w.Temp - 32) * 5 / 9).ToList().Count;
+
+
+            return TempretaureInCelsiusForJFK();
+
+
+        }  
+               
+
+
+
+
+        }
 }
