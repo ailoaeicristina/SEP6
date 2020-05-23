@@ -13,6 +13,7 @@ namespace Nycflights_Project.Controllers
         private Dictionary<int, string> monthsByNumber = new Dictionary<int, string>()
             { {1, "Jan" }, {2, "Feb"}, {3, "Mar"},  {4, "Apr"},  {5, "May"},  {6, "Jun"},
                 {7, "Jul"},  {8, "Aug"},  {9, "Sep"},  {10, "Oct"},  {11, "Nov"},  {12, "Dec"}};
+       
 
         #region Flights per month
         //1. GET: api/Nycflights/FlightsPerMonth
@@ -23,6 +24,18 @@ namespace Nycflights_Project.Controllers
 
             return context.Flights.Select(f => f.Month).ToList().GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
+
+        //1.1 Get: api/Nycflights/FlightsPerMonthLikeNumbers
+        [HttpGet("[action]")]
+        public Dictionary<int, int> FlightsPerMonthLikeNumbers()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Flights.Select(f => f.Month).ToList().GroupBy(m => m).ToDictionary(g => g.Key, g => g.Count());
+        }
+            
+
+
 
         //2.1. GET: api/Nycflights/FlightsPerMonthForJFK
         [HttpGet("[action]")]
@@ -136,7 +149,7 @@ namespace Nycflights_Project.Controllers
 
             TimeSpan tavgAirtimeJFK = new TimeSpan(), tavgAirtimeEWR = new TimeSpan(), tavgAirtimeLGA = new TimeSpan();
 
-            if(averageAirtimeJFK != null)
+            if (averageAirtimeJFK != null)
                 tavgAirtimeJFK = TimeSpan.FromMinutes((double)averageAirtimeJFK);
 
             if (averageAirtimeEWR != null)
@@ -161,23 +174,39 @@ namespace Nycflights_Project.Controllers
 
 
 
-        //7. GET: api/Nycflights/TempretaureInCelsiusForJFK
+        //this solution did not work, because Weather.Pressure conatins some null value
+        //so this code throws an exception
+        // 7. GET: api/Nycflights/TemperatureInCelsiusForJFK
+        //[HttpGet("[action]")]
+        //public Dictionary<DateTime, float> TemperatureInCelsiusForJFK()
+        //{
+        //    var context = new Nycflights13DBContext();
+        //    Dictionary<DateTime, float> TemperatureInCelsiusForJFK = new Dictionary<DateTime, float>();
+        //    foreach (var item in context.Weather)
+        //    {
+
+        //        if (!string.IsNullOrEmpty(item.Origin) && item.Origin.Equals("JFK") && item.Pressure > 0)
+        //        TemperatureInCelsiusForJFK.Add(item.Time_hour, (item.Temp - 23) * 5 / 9);
+
+        //    }
+
+        //    return TemperatureInCelsiusForJFK;
+
+        //}
+
+
+        //7. GET: api/Nycflights/TemperatureInCelsiusForJFK
         [HttpGet("[action]")]
-        public Dictionary<string, string> TempretaureInCelsiusForJFK()
+        public Dictionary<DateTime,float> TemperatureInCelsiusForJFK()
         {
-            var context = new Nycflights13DBContext();
 
-            float? TemInCelsiusForJFK = context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("JFK")).Select(w => (w.Temp - 32) * 5 / 9).ToList().Count;
-
-
-            return TempretaureInCelsiusForJFK();
-
-
-        }  
-               
-
-
-
-
+            var context = new Nycflights13DBContext();  
+            
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("JFK"))
+                .Select(w => new { w.Time_hour, w.Temp}).ToList().ToDictionary(g => g.Time_hour, g=> (g.Temp-23)*5/9);
         }
+
+
+
+    }
 }
