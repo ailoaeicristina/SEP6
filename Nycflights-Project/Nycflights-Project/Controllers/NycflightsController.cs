@@ -176,7 +176,18 @@ namespace Nycflights_Project.Controllers
             var context = new Nycflights13DBContext();
 
             return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("JFK"))
-                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp)-32)*5/9);
+                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
+        }
+
+        //13. GET: api/Nycflights/PlanesforAirbus
+        [HttpGet("[action]")]
+        public Dictionary<string, int> PlanesforAirbus()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Planes.Where(p => !string.IsNullOrEmpty(p.Manufacturer) && p.Manufacturer.Contains("AIRBUS"))
+                .Select(p => p.Manufacturer).GroupBy(g => g).ToDictionary(g => g.Key, g => context.Planes.Where
+                (p => p.Manufacturer.Equals(g.Key)).Select(p => p.Tailnum).Count());
         }
 
     }
