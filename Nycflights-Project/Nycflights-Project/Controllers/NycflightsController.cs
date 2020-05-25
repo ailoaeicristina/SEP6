@@ -219,6 +219,72 @@ namespace Nycflights_Project.Controllers
                 .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
         }
 
+        //10.1. GET: api/Nycflights/MeanDepartureAndArrivalDelayForJFK
+        [HttpGet("[action]")]
+        public Dictionary<string, string> MeanDepartureAndArrivalDelayForJFK()
+        {
+            var context = new Nycflights13DBContext();
+
+            double? averageDepDelayJFK = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("JFK")).Select(f => f.Dep_delay).ToList().Average();
+            double? averageArrDelayJFK = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("JFK")).Select(f => f.Arr_delay).ToList().Average();
+
+            TimeSpan tavgDepDelayJFK = new TimeSpan();
+            TimeSpan tavgArrDelayJFK = new TimeSpan();
+
+            if (averageDepDelayJFK != null)
+                tavgDepDelayJFK = TimeSpan.FromMinutes((double)averageDepDelayJFK);
+
+            if (averageArrDelayJFK != null)
+                tavgArrDelayJFK = TimeSpan.FromMinutes((double)averageArrDelayJFK);
+
+            return new Dictionary<string, string>() { { "Mean departure delay", tavgDepDelayJFK.TotalSeconds >= 0 ? tavgDepDelayJFK.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayJFK.ToString("hh\\:mm\\:ss") },
+                { "Mean arrival delay", tavgArrDelayJFK.TotalSeconds >= 0 ? tavgArrDelayJFK.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayJFK.ToString("hh\\:mm\\:ss") }  };
+        }
+
+        //10.2. GET: api/Nycflights/MeanDepartureAndArrivalDelayForEWR
+        [HttpGet("[action]")]
+        public Dictionary<string, string> MeanDepartureAndArrivalDelayForEWR()
+        {
+            var context = new Nycflights13DBContext();
+
+            double? averageDepDelayEWR = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("EWR")).Select(f => f.Dep_delay).ToList().Average();
+            double? averageArrDelayEWR = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("EWR")).Select(f => f.Arr_delay).ToList().Average();
+
+            TimeSpan tavgDepDelayEWR = new TimeSpan();
+            TimeSpan tavgArrDelayEWR = new TimeSpan();
+
+            if (averageDepDelayEWR != null)
+                tavgDepDelayEWR = TimeSpan.FromMinutes((double)averageDepDelayEWR);
+
+            if (averageArrDelayEWR != null)
+                tavgArrDelayEWR = TimeSpan.FromMinutes((double)averageArrDelayEWR);
+
+            return new Dictionary<string, string>() { { "Mean departure delay", tavgDepDelayEWR.TotalSeconds >= 0 ? tavgDepDelayEWR.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayEWR.ToString("hh\\:mm\\:ss") },
+                { "Mean arrival delay", tavgArrDelayEWR.TotalSeconds >= 0 ? tavgArrDelayEWR.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayEWR.ToString("hh\\:mm\\:ss") }  };
+        }
+
+        //10.3. GET: api/Nycflights/MeanDepartureAndArrivalDelayForLGA
+        [HttpGet("[action]")]
+        public Dictionary<string, string> MeanDepartureAndArrivalDelayForLGA()
+        {
+            var context = new Nycflights13DBContext();
+
+            double? averageDepDelayLGA = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("LGA")).Select(f => f.Dep_delay).ToList().Average();
+            double? averageArrDelayLGA = context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("LGA")).Select(f => f.Arr_delay).ToList().Average();
+
+            TimeSpan tavgDepDelayLGA = new TimeSpan();
+            TimeSpan tavgArrDelayLGA = new TimeSpan();
+
+            if (averageDepDelayLGA != null)
+                tavgDepDelayLGA = TimeSpan.FromMinutes((double)averageDepDelayLGA);
+
+            if (averageArrDelayLGA != null)
+                tavgArrDelayLGA = TimeSpan.FromMinutes((double)averageArrDelayLGA);
+
+            return new Dictionary<string, string>() { { "Mean departure delay", tavgDepDelayLGA.TotalSeconds >= 0 ? tavgDepDelayLGA.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayLGA.ToString("hh\\:mm\\:ss") },
+                { "Mean arrival delay", tavgArrDelayLGA.TotalSeconds >= 0 ? tavgArrDelayLGA.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayLGA.ToString("hh\\:mm\\:ss") }  };
+        }
+
         //13. GET: api/Nycflights/PlanesforAirbus
         [HttpGet("[action]")]
         public Dictionary<string, int> PlanesforAirbus()
