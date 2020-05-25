@@ -199,6 +199,26 @@ namespace Nycflights_Project.Controllers
                 .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
         }
 
+        //9.1. GET: api/Nycflights/DailyMeanTempInCelsiusForEWR
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForEWR()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("EWR"))
+                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
+        }
+
+        //9.2. GET: api/Nycflights/DailyMeanTempInCelsiusForLGA
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForLGA()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA"))
+                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
+        }
+
         //13. GET: api/Nycflights/PlanesforAirbus
         [HttpGet("[action]")]
         public Dictionary<string, int> PlanesforAirbus()
