@@ -199,6 +199,26 @@ namespace Nycflights_Project.Controllers
                 .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
         }
 
+        //9.1. GET: api/Nycflights/DailyMeanTempInCelsiusForEWR
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForEWR()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("EWR"))
+                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
+        }
+
+        //9.2. GET: api/Nycflights/DailyMeanTempInCelsiusForLGA
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForLGA()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA"))
+                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
+        }
+
         //13. GET: api/Nycflights/PlanesforAirbus
         [HttpGet("[action]")]
         public Dictionary<string, int> PlanesforAirbus()
@@ -209,48 +229,6 @@ namespace Nycflights_Project.Controllers
                 .Select(p => p.Manufacturer).GroupBy(g => g).ToDictionary(g => g.Key, g => context.Planes.Where
                 (p => p.Manufacturer.Equals(g.Key)).Select(p => p.Tailnum).Count());
         }
-
-        //9.1. GET: api/Nycflights/DailyMeanTempInCelsiusForEWR
-        [HttpGet("[action]")]
-        public Dictionary<string, float> DailyMeanTempInCelsiusForEWR()
-        {
-            var context = new Nycflights13DBContext();
-
-
-            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("EWR") && w.Temp >= 0)
-
-                     .Select(w => w.Time_hour.Date.ToShortDateString()).GroupBy(g => g).ToList()
-                     .ToDictionary(g => g.Key, g => context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Temp >= 0 && w.Origin.Equals("EWR")
-                     && w.Time_hour.Date.ToShortDateString().Equals(g.Key)).Select(w => w.Temp).ToList().Average())
-                     .ToDictionary(g => g.Key, g => (g.Value - 32) * 5 / 9);
-
-
-
-        }
-
-
-
-
-        //9.2. GET: api/Nycflights/DailyMeanTempInCelsiusForLGA
-        [HttpGet("[action]")]
-        public Dictionary<string, float> DailyMeanTempInCelsiusForLGA()
-        {
-            var context = new Nycflights13DBContext();
-
-
-            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA"))
-
-                     .Select(w => w.Time_hour.Date.ToShortDateString()).GroupBy(g => g).ToList()
-                     .ToDictionary(g => g.Key, g => context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA")
-                     && w.Time_hour.Date.ToShortDateString().Equals(g.Key)).Select(w => w.Temp).ToList().Average())
-                     .ToDictionary(g => g.Key, g => (g.Value - 32) * 5 / 9);
-
-
-
-        }
-
-
-
 
     }
 }
