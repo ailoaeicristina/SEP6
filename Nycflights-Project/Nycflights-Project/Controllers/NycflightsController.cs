@@ -176,6 +176,21 @@ namespace Nycflights_Project.Controllers
         }
 
 
+        //13. GET: api/Nycflights/NoPlanesforAIRBUS
+        [HttpGet("[action]")]
+        public Dictionary<string, int> NoPlanesforAIRBUS()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Planes.Where(p => !string.IsNullOrEmpty(p.Manufacturer) && p.Manufacturer.Contains("AIRBUS")).Select(p => p.Manufacturer).GroupBy(g => g).ToList()
+                        .ToDictionary(g => g.Key, g => context.Planes.Where(p => p.Manufacturer.Equals(g.Key))
+                        .Select(p => p.Tailnum).Count())
+                        ;
+
+
+        }
+
+
 
     }
 }
