@@ -14,7 +14,6 @@ namespace Nycflights_Project.Controllers
             { {1, "Jan" }, {2, "Feb"}, {3, "Mar"},  {4, "Apr"},  {5, "May"},  {6, "Jun"},
                 {7, "Jul"},  {8, "Aug"},  {9, "Sep"},  {10, "Oct"},  {11, "Nov"},  {12, "Dec"}};
        
-
         #region Flights per month
         //1. GET: api/Nycflights/FlightsPerMonth
         [HttpGet("[action]")]
@@ -24,8 +23,6 @@ namespace Nycflights_Project.Controllers
 
             return context.Flights.Select(f => f.Month).ToList().GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
-
-      
 
         //2.1. GET: api/Nycflights/FlightsPerMonthForJFK
         [HttpGet("[action]")]
@@ -162,19 +159,71 @@ namespace Nycflights_Project.Controllers
             return context.Weather.Select(w => w.Origin).ToList().GroupBy(o => o).ToDictionary(g => g.Key, g => g.Count());
         }
 
+        //6.1. GET: api/Nycflights/TemperatureInCelsiusForEWR
+        [HttpGet("[action]")]
+        public Dictionary<DateTime, float> TemperatureInCelsiusForEWR()
+        {
+            var context = new Nycflights13DBContext();
 
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("EWR") && w.Temp >= 0)
+                .Select(w => new { w.Time_hour, w.Temp }).ToDictionary(g => g.Time_hour, g => (g.Temp - 32) * 5 / 9);
+        }
+
+        //6.2. GET: api/Nycflights/TemperatureInCelsiusForLGA
+        [HttpGet("[action]")]
+        public Dictionary<DateTime, float> TemperatureInCelsiusForLGA()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA"))
+                .Select(w => new { w.Time_hour, w.Temp }).ToDictionary(g => g.Time_hour, g => (g.Temp - 32) * 5 / 9);
+        }
 
         //7. GET: api/Nycflights/TemperatureInCelsiusForJFK
         [HttpGet("[action]")]
         public Dictionary<DateTime,float> TemperatureInCelsiusForJFK()
         {
-
             var context = new Nycflights13DBContext();  
             
             return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("JFK"))
-                .Select(w => new { w.Time_hour, w.Temp}).ToList().ToDictionary(g => g.Time_hour, g=> (g.Temp-32)*5/9);
+                .Select(w => new { w.Time_hour, w.Temp}).ToDictionary(g => g.Time_hour, g=> (g.Temp - 32) * 5 / 9);
         }
 
+        //8. GET: api/Nycflights/DailyMeanTempInCelsiusForJFK
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForJFK()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("JFK"))
+                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
+        }
+
+        //9.1. GET: api/Nycflights/DailyMeanTempInCelsiusForEWR
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForEWR()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("EWR"))
+                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
+        }
+
+        //9.2. GET: api/Nycflights/DailyMeanTempInCelsiusForLGA
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForLGA()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA"))
+                .GroupBy(g => g.Time_hour.Date.ToShortDateString()).ToDictionary(p => p.Key, p => (p.Average(g => g.Temp) - 32) * 5 / 9);
+        }
+
+        //13. GET: api/Nycflights/PlanesforAirbus
+        [HttpGet("[action]")]
+        public Dictionary<string, int> PlanesforAirbus()
+        {
+            var context = new Nycflights13DBContext();
 
         //10.1. GET: api/Nycflights/MeanDepMeanArrDelayForJFK
         [HttpGet("[action]")]
