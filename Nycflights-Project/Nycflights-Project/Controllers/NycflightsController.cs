@@ -159,35 +159,25 @@ namespace Nycflights_Project.Controllers
             return context.Weather.Select(w => w.Origin).ToList().GroupBy(o => o).ToDictionary(g => g.Key, g => g.Count());
         }
 
-
-
         //6.1. GET: api/Nycflights/TemperatureInCelsiusForEWR
         [HttpGet("[action]")]
         public Dictionary<DateTime, float> TemperatureInCelsiusForEWR()
         {
-
             var context = new Nycflights13DBContext();
 
             return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("EWR") && w.Temp >= 0)
-                .Select(w => new { w.Time_hour, w.Temp }).ToList().ToDictionary(g => g.Time_hour, g => (g.Temp - 32) * 5 / 9);
+                .Select(w => new { w.Time_hour, w.Temp }).ToDictionary(g => g.Time_hour, g => (g.Temp - 32) * 5 / 9);
         }
-
-
-
 
         //6.2. GET: api/Nycflights/TemperatureInCelsiusForLGA
         [HttpGet("[action]")]
         public Dictionary<DateTime, float> TemperatureInCelsiusForLGA()
         {
-
             var context = new Nycflights13DBContext();
 
             return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA"))
-                .Select(w => new { w.Time_hour, w.Temp }).ToList().ToDictionary(g => g.Time_hour, g => (g.Temp - 32) * 5 / 9);
+                .Select(w => new { w.Time_hour, w.Temp }).ToDictionary(g => g.Time_hour, g => (g.Temp - 32) * 5 / 9);
         }
-
-
-
 
         //7. GET: api/Nycflights/TemperatureInCelsiusForJFK
         [HttpGet("[action]")]
@@ -196,7 +186,7 @@ namespace Nycflights_Project.Controllers
             var context = new Nycflights13DBContext();  
             
             return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("JFK"))
-                .Select(w => new { w.Time_hour, w.Temp}).ToDictionary(g => g.Time_hour, g=> (g.Temp-32)*5/9);
+                .Select(w => new { w.Time_hour, w.Temp}).ToDictionary(g => g.Time_hour, g=> (g.Temp - 32) * 5 / 9);
         }
 
         //8. GET: api/Nycflights/DailyMeanTempInCelsiusForJFK
