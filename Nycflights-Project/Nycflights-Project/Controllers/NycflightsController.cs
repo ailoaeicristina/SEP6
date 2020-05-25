@@ -285,8 +285,22 @@ namespace Nycflights_Project.Controllers
                 { "Mean arrival delay", tavgArrDelayLGA.TotalSeconds >= 0 ? tavgArrDelayLGA.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayLGA.ToString("hh\\:mm\\:ss") }  };
         }
 
-        //13. GET: api/Nycflights/PlanesforAirbus
+
+        //11. GET: api/Nycflights/ManufacturersMoreThan200Planes
         [HttpGet("[action]")]
+        public Dictionary<string, int> ManufacturersMoreThan200Planes()
+        {
+            var context = new Nycflights13DBContext();
+
+            return context.Planes.Select(p => p.Manufacturer).GroupBy(g => g).
+                 ToDictionary(g => g.Key, g => context.Planes.Where(p => p.Manufacturer.Equals(g.Key))
+                          .Select(p => p.Tailnum).Count());
+
+        }
+
+
+            //13. GET: api/Nycflights/PlanesforAirbus
+            [HttpGet("[action]")]
         public Dictionary<string, int> PlanesforAirbus()
         {
             var context = new Nycflights13DBContext();
