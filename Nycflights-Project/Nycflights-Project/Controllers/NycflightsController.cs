@@ -177,5 +177,47 @@ namespace Nycflights_Project.Controllers
 
 
 
+        //9.1. GET: api/Nycflights/DailyMeanTempInCelsiusForEWR
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForEWR()
+        {
+            var context = new Nycflights13DBContext();
+
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("EWR") && w.Temp >= 0)
+
+                     .Select(w => w.Time_hour.Date.ToShortDateString()).GroupBy(g => g).ToList()
+                     .ToDictionary(g => g.Key, g => context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Temp >= 0 && w.Origin.Equals("EWR")
+                     && w.Time_hour.Date.ToShortDateString().Equals(g.Key)).Select(w => w.Temp).ToList().Average())
+                     .ToDictionary(g => g.Key, g => (g.Value - 32) * 5 / 9);
+
+
+
+        }
+
+
+
+
+        //9.2. GET: api/Nycflights/DailyMeanTempInCelsiusForLGA
+        [HttpGet("[action]")]
+        public Dictionary<string, float> DailyMeanTempInCelsiusForLGA()
+        {
+            var context = new Nycflights13DBContext();
+
+
+            return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA"))
+
+                     .Select(w => w.Time_hour.Date.ToShortDateString()).GroupBy(g => g).ToList()
+                     .ToDictionary(g => g.Key, g => context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("LGA")
+                     && w.Time_hour.Date.ToShortDateString().Equals(g.Key)).Select(w => w.Temp).ToList().Average())
+                     .ToDictionary(g => g.Key, g => (g.Value - 32) * 5 / 9);
+
+
+
+        }
+
+
+
+
     }
 }
