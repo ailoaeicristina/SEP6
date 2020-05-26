@@ -285,7 +285,6 @@ namespace Nycflights_Project.Controllers
                 { "Mean arrival delay", tavgArrDelayLGA.TotalSeconds >= 0 ? tavgArrDelayLGA.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayLGA.ToString("hh\\:mm\\:ss") }  };
         }
 
-
         //11. GET: api/Nycflights/ManufacturersMoreThanTwoHundredPlanes
         [HttpGet("[action]")]
         public Dictionary<string, int> ManufacturersMoreThanTwoHundredPlanes()
@@ -294,6 +293,35 @@ namespace Nycflights_Project.Controllers
 
             return context.Planes.Select(p => p.Manufacturer).ToList()
                 .GroupBy(m => m).Where(m => m.Count() >= 200).ToDictionary(g => g.Key, g => g.Count());
+        }
+
+        //12. GET: api/Nycflights/FlightsManufacturersMoreThanTwoHundredPlanes
+        [HttpGet("[action]")]
+        public Dictionary<string, int> FlightsManufacturersMoreThanTwoHundredPlanes()
+        {
+            var context = new Nycflights13DBContext();
+
+            Dictionary<string, int> flightsManufacturersMoreThanTwoHundredPlanes = new Dictionary<string, int>();
+            Dictionary<string, int> manufacturersMoreThanTwoHundredPlanes = ManufacturersMoreThanTwoHundredPlanes();
+
+            Dictionary<string, int> countByTailNum = context.Flights.Select(f => f.Tailnum).ToList().GroupBy(m => m).ToDictionary(g => g.Key, g => g.Count());
+
+            foreach (KeyValuePair<string, int> pair in manufacturersMoreThanTwoHundredPlanes)
+            { 
+                List<string> tailNums = context.Planes.Where(p => p.Manufacturer.Equals(pair.Key)).Select(p => p.Tailnum).ToList();
+                int flights = 0;
+                int flightsForTailNum = 0;
+
+                foreach (string tailNum in tailNums)
+                {
+                    countByTailNum.TryGetValue(tailNum, out flightsForTailNum);
+                    flights += flightsForTailNum; 
+                }
+
+                flightsManufacturersMoreThanTwoHundredPlanes.Add(pair.Key, flights);
+            }
+
+            return flightsManufacturersMoreThanTwoHundredPlanes;
         }
 
         //13. GET: api/Nycflights/PlanesforAirbus
