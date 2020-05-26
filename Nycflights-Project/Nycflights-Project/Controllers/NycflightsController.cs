@@ -286,21 +286,18 @@ namespace Nycflights_Project.Controllers
         }
 
 
-        //11. GET: api/Nycflights/ManufacturersMoreThan200Planes
+        //11. GET: api/Nycflights/ManufacturersMoreThanTwoHundredPlanes
         [HttpGet("[action]")]
-        public Dictionary<string, int> ManufacturersMoreThan200Planes()
+        public Dictionary<string, int> ManufacturersMoreThanTwoHundredPlanes()
         {
             var context = new Nycflights13DBContext();
 
-            return context.Planes.Select(p => p.Manufacturer).GroupBy(g => g).
-                 ToDictionary(g => g.Key, g => context.Planes.Where(p => p.Manufacturer.Equals(g.Key))
-                          .Select(p => p.Tailnum).Count());
-
+            return context.Planes.Select(p => p.Manufacturer).ToList()
+                .GroupBy(m => m).Where(m => m.Count() >= 200).ToDictionary(g => g.Key, g => g.Count());
         }
 
-
-            //13. GET: api/Nycflights/PlanesforAirbus
-            [HttpGet("[action]")]
+        //13. GET: api/Nycflights/PlanesforAirbus
+        [HttpGet("[action]")]
         public Dictionary<string, int> PlanesforAirbus()
         {
             var context = new Nycflights13DBContext();
