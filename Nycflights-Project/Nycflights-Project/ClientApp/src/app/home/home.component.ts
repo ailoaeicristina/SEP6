@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
 import { HttpClient } from '@angular/common/http';
 
@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './home.component.html'
 })
 
-export class HomeComponent implements OnInit {
+export class HomeComponent{
 
   public flightsPerMonth: Map<string, number> = new Map<string, number>();
 
@@ -27,23 +27,22 @@ export class HomeComponent implements OnInit {
           text: "Number of flights per month"
         },
         axisX: {
-          title: "Month"
+          title: "Month",
+          interval:1
         },
         axisY: {
           title: "Number of flights"
         },
         data: [{
           type: "column",
-          dataPoints: dataPoints
+          dataPoints: dataPoints,
+          color: "#2E86C1"
         }]
       });
       chart.render();
 
     }, error => console.error(error));
   }
-
-
-  ngOnInit() { }
 }
 
 
