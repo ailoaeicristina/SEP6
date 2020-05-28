@@ -21,7 +21,7 @@ namespace Nycflights_Project.Controllers
         {
             var context = new Nycflights13DBContext();
 
-            return context.Flights.Select(f => f.Month).ToList().GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
+            return context.Flights.Select(f => f.Month).ToList().GroupBy(m => m).OrderBy(g => g.Key).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
 
         //2.1. GET: api/Nycflights/FlightsPerMonthForJFK
