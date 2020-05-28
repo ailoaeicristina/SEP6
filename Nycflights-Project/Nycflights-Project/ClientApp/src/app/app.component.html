@@ -1,9 +1,68 @@
 <mat-sidenav-container>
     <mat-sidenav mode="side" opened>
-        <div class="container">
-            Sidenav
-        </div>
+        <!-- <div class="container"> -->
+        <mat-accordion class="example-headers-align" multi>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <div class="row" style="margin-top: 1em;">
+                            <div class="col-2">
+                                <mat-icon>flight_takeoff</mat-icon>
+                            </div>
+                            <div class="col-8">
+                                <h3>Flights</h3>
+                            </div>
+                        </div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-list role="list">
+                    <mat-list-item role="listitem">Total Flights/Month</mat-list-item>
+                    <mat-list-item role="listitem">Monthly Flights/Origin</mat-list-item>
+                    <mat-list-item role="listitem">Top 10 Destinations</mat-list-item>
+                    <mat-list-item role="listitem">Mean Air Time</mat-list-item>
+                    <mat-list-item role="listitem">Men Dep. & Arrival Delay</mat-list-item>
+                </mat-list>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <div class="row" style="margin-top: 1em;">
+                            <div class="col-2">
+                                <mat-icon>wb_sunny</mat-icon>
+                            </div>
+                            <div class="col-8">
+                                <h3>Weather</h3>
+                            </div>
+                        </div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-list role="list">
+                    <mat-list-item role="listitem">All Measured Temperatures</mat-list-item>
+                    <mat-list-item role="listitem">Daily Mean Temperatures</mat-list-item>
+                </mat-list>
+            </mat-expansion-panel>
+            <mat-expansion-panel>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <div class="row" style="margin-top: 1em;">
+                            <div class="col-2">
+                                <mat-icon>flight</mat-icon>
+                            </div>
+                            <div class="col-8">
+                                <h3>Planes</h3>
+                            </div>
+                        </div>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                    <mat-list role="list">
+                    <mat-list-item role="listitem">Big Manufacturers</mat-list-item>
+                    <mat-list-item role="listitem">Flights/Big Manufacturers</mat-list-item>
+                    <mat-list-item role="listitem">Air Bus Models</mat-list-item>
+                </mat-list>
+            </mat-expansion-panel>
+        </mat-accordion>
     </mat-sidenav>
+    
     <mat-sidenav-content>
         <div class="container">
             Main content

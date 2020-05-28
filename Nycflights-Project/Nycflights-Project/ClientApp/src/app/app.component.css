@@ -1,0 +1,14 @@
+mat-sidenav-container {
+    height: 100%;
+}
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align {
+    flex-basis: 0;
+}
+.example-headers-align {
+    justify-content: space-between;
+    align-items: center;
+}
+mat-expansion-panel {
+    box-shadow: none !important;
+}
