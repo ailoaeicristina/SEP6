@@ -1,7 +1,6 @@
-/*app.component.ts*/
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import * as CanvasJS from './canvasjs.min';
-//var CanvasJS = require('./canvasjs.min');
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',
@@ -9,29 +8,42 @@ import * as CanvasJS from './canvasjs.min';
 })
 
 export class HomeComponent implements OnInit {
-  ngOnInit() {
-    let dataPoints = [
-      { y: 71 },
-      { y: 55 },
-      { y: 50 },
-      { y: 65 },
-      { y: 95 },
-      { y: 68 },
-      { y: 28 },
-      { y: 34 },
-      { y: 14 }
-    ];
 
-    let chart = new CanvasJS.Chart("chartContainer", {
-      animationEnabled: true,
-      title: {
-        text: "Basic Column Chart in Angular 5"
-      },
-      data: [{
-        type: "column",
-        dataPoints: dataPoints
-      }]
-    });
-    chart.render();
+  public flightsPerMonth: Map<string, number> = new Map<string, number>();
+
+  constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
+    http.get<Map<string, number>>(baseUrl + 'api/Nycflights/FlightsPerMonth').subscribe(result => {
+
+      let dataPoints = [];
+
+      Object.keys(result).forEach(function (key) {
+        dataPoints.push({ label: key, y: result[key] })
+        console.log(key + ":" + result[key]);
+      });
+
+      let chart = new CanvasJS.Chart("chartContainer", {
+        animationEnabled: true,
+        title: {
+          text: "Number of flights per month"
+        },
+        axisX: {
+          title: "Month"
+        },
+        axisY: {
+          title: "Number of flights"
+        },
+        data: [{
+          type: "column",
+          dataPoints: dataPoints
+        }]
+      });
+      chart.render();
+
+    }, error => console.error(error));
   }
+
+
+  ngOnInit() { }
 }
+
+
