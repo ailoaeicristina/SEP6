@@ -237,8 +237,8 @@ namespace Nycflights_Project.Controllers
             if (averageArrDelayJFK != null)
                 tavgArrDelayJFK = TimeSpan.FromMinutes((double)averageArrDelayJFK);
 
-            return new Dictionary<string, string>() { { "Mean departure delay", tavgDepDelayJFK.TotalSeconds >= 0 ? tavgDepDelayJFK.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayJFK.ToString("hh\\:mm\\:ss") },
-                { "Mean arrival delay", tavgArrDelayJFK.TotalSeconds >= 0 ? tavgArrDelayJFK.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayJFK.ToString("hh\\:mm\\:ss") }  };
+            return new Dictionary<string, string>() { { tavgDepDelayJFK.TotalSeconds >= 0 ? tavgDepDelayJFK.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayJFK.ToString("hh\\:mm\\:ss"),
+                tavgArrDelayJFK.TotalSeconds >= 0 ? tavgArrDelayJFK.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayJFK.ToString("hh\\:mm\\:ss") }  };
         }
 
         //10.2. GET: api/Nycflights/MeanDepartureAndArrivalDelayForEWR
@@ -259,8 +259,8 @@ namespace Nycflights_Project.Controllers
             if (averageArrDelayEWR != null)
                 tavgArrDelayEWR = TimeSpan.FromMinutes((double)averageArrDelayEWR);
 
-            return new Dictionary<string, string>() { { "Mean departure delay", tavgDepDelayEWR.TotalSeconds >= 0 ? tavgDepDelayEWR.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayEWR.ToString("hh\\:mm\\:ss") },
-                { "Mean arrival delay", tavgArrDelayEWR.TotalSeconds >= 0 ? tavgArrDelayEWR.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayEWR.ToString("hh\\:mm\\:ss") }  };
+            return new Dictionary<string, string>() { { tavgDepDelayEWR.TotalSeconds >= 0 ? tavgDepDelayEWR.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayEWR.ToString("hh\\:mm\\:ss"),
+                tavgArrDelayEWR.TotalSeconds >= 0 ? tavgArrDelayEWR.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayEWR.ToString("hh\\:mm\\:ss") }  };
         }
 
         //10.3. GET: api/Nycflights/MeanDepartureAndArrivalDelayForLGA
@@ -281,8 +281,8 @@ namespace Nycflights_Project.Controllers
             if (averageArrDelayLGA != null)
                 tavgArrDelayLGA = TimeSpan.FromMinutes((double)averageArrDelayLGA);
 
-            return new Dictionary<string, string>() { { "Mean departure delay", tavgDepDelayLGA.TotalSeconds >= 0 ? tavgDepDelayLGA.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayLGA.ToString("hh\\:mm\\:ss") },
-                { "Mean arrival delay", tavgArrDelayLGA.TotalSeconds >= 0 ? tavgArrDelayLGA.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayLGA.ToString("hh\\:mm\\:ss") }  };
+            return new Dictionary<string, string>() { { tavgDepDelayLGA.TotalSeconds >= 0 ? tavgDepDelayLGA.ToString("hh\\:mm\\:ss") : "-" + tavgDepDelayLGA.ToString("hh\\:mm\\:ss"),
+                tavgArrDelayLGA.TotalSeconds >= 0 ? tavgArrDelayLGA.ToString("hh\\:mm\\:ss") : "-" + tavgArrDelayLGA.ToString("hh\\:mm\\:ss") }  };
         }
 
         //11. GET: api/Nycflights/ManufacturersMoreThanTwoHundredPlanes
