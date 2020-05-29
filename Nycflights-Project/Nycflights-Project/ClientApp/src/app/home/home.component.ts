@@ -1,6 +1,7 @@
 import { Component, AfterViewInit, Inject } from '@angular/core';
-import * as CanvasJS from './canvasjs.min';
 import { HttpClient } from '@angular/common/http';
+import * as CanvasJS from './canvasjs.min';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -9,110 +10,61 @@ import { HttpClient } from '@angular/common/http';
 
 export class HomeComponent implements AfterViewInit {
 
-  public flightsPerMonth: Map<string, number> = new Map<string, number>();
   public http: HttpClient;
   public baseUrl: string;
+
+  public flightsToTopTenDestinations: Map<string, number>;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
     this.baseUrl = baseUrl;
-    // Feature 1 - Flights per month
-    http.get<Map<string, number>>(baseUrl + 'api/Nycflights/FlightsPerMonth').subscribe(result => {
+  }
 
-      let dataPoints = [];
+  ngAfterViewInit() {
+
+    //Feature 1 - Flights per month
+    this.loadFlightsPerMonth();
+
+    //Feature 2 - Flights per month from origins
+    this.loadFlightsPerMonthFromOrigins();
+
+    //Feature 3 - Flights to top 10 destinations
+    this.loadFlightToTopTenDestinations();
+  }
+
+  loadFlightsPerMonth() {
+    let dataPoints = [];
+
+    let chart = new CanvasJS.Chart("chartContainer1", {
+      animationEnabled: true,
+      title: {
+        text: "Number of flights per month"
+      },
+      axisX: {
+        title: "Month",
+        interval: 1
+      },
+      axisY: {
+        title: "Number of flights"
+      },
+      data: [{
+        type: "column",
+        dataPoints: dataPoints,
+        color: "#2E86C1"
+      }]
+    });
+    chart.render();
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/FlightsPerMonth').subscribe(result => {
 
       Object.keys(result).forEach(function (key) {
         dataPoints.push({ label: key, y: result[key] })
       });
-
-      let chart = new CanvasJS.Chart("chartContainer1", {
-        animationEnabled: true,
-        title: {
-          text: "Number of flights per month"
-        },
-        axisX: {
-          title: "Month",
-          interval:1
-        },
-        axisY: {
-          title: "Number of flights"
-        },
-        data: [{
-          type: "column",
-          dataPoints: dataPoints,
-          color: "#2E86C1"
-        }]
-      });
       chart.render();
-
     }, error => console.error(error));
-
-    //Feature 3 - Flights to top 10 destinations
-    let dataPointsJFKToDestinations = [];
-    http.get<Map<string, number>>(baseUrl + 'api/Nycflights/FlightsToTopTenDestinationsFromJFK').subscribe(result => {
-
-      Object.keys(result).forEach(function (key) {
-        dataPointsJFKToDestinations.push({ label: key, y: result[key] })
-      });
-    }, error => console.error(error));
-
-    let dataPointsEWRToDestinations = [];
-    http.get<Map<string, number>>(baseUrl + 'api/Nycflights/FlightsToTopTenDestinationsFromEWR').subscribe(result => {
-
-      Object.keys(result).forEach(function (key) {
-        dataPointsEWRToDestinations.push({ label: key, y: result[key] })
-      });
-    }, error => console.error(error));
-
-    let dataPointsLGAToDestinations = [];
-    http.get<Map<string, number>>(baseUrl + 'api/Nycflights/FlightsToTopTenDestinationsFromLGA').subscribe(result => {
-
-      Object.keys(result).forEach(function (key) {
-        dataPointsLGAToDestinations.push({ label: key, y: result[key] })
-      });
-
-      let chartFrequency = new CanvasJS.Chart("chartContainer3", {
-        animationEnabled: true,
-        title: {
-          text: "Number of flights to top 10 destinations from origins"
-        },
-        axisX: {
-          title: "Destination",
-          interval: 1
-        },
-        axisY: {
-          title: "Number of flights"
-        },
-        data: [{
-          type: "column",
-          legendText: "JFK",
-          showInLegend: true,
-          dataPoints: dataPointsJFKToDestinations,
-          color: "#2E86C1"
-        },
-        {
-          type: "column",
-          legendText: "EWR",
-          showInLegend: true,
-          dataPoints: dataPointsEWRToDestinations,
-          color: "#C13B2E"
-        },
-        {
-          type: "column",
-          legendText: "LGA",
-          showInLegend: true,
-          dataPoints: dataPointsLGAToDestinations,
-          color: "#2EC146"
-        },
-        ]
-      });
-      chartFrequency.render();
-
-    }, error => console.error(error)); 
   }
 
-  ngAfterViewInit() {
-    //Feature 2 - Flights per month from origins
+  loadFlightsPerMonthFromOrigins() {
     let dataPointsJFK = [];
     let dataPointsEWR = [];
     let dataPointsLGA = [];
@@ -265,6 +217,96 @@ export class HomeComponent implements AfterViewInit {
       chartStacked.render();
       chartStackedPercentage.render();
     }, error => console.error(error));
+    
+  }
+
+  loadFlightToTopTenDestinations() {
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/FlightsToTopTenDestinations').subscribe(result => {
+      this.flightsToTopTenDestinations = result;
+    }, error => console.error(error));
+
+    let dataPointsJFKToDestinations = [];
+    let dataPointsEWRToDestinations = [];
+    let dataPointsLGAToDestinations = [];
+
+    let chart = new CanvasJS.Chart("chartContainer3", {
+      animationEnabled: true,
+      title: {
+        text: "Number of flights to top 10 destinations from origins"
+      },
+      axisX: {
+        title: "Destination",
+        interval: 1
+      },
+      axisY: {
+        title: "Number of flights"
+      },
+      data: [{
+        type: "column",
+        legendText: "JFK",
+        showInLegend: true,
+        dataPoints: dataPointsJFKToDestinations,
+        color: "#2E86C1"
+      },
+      {
+        type: "column",
+        legendText: "EWR",
+        showInLegend: true,
+        dataPoints: dataPointsEWRToDestinations,
+        color: "#C13B2E"
+      },
+      {
+        type: "column",
+        legendText: "LGA",
+        showInLegend: true,
+        dataPoints: dataPointsLGAToDestinations,
+        color: "#2EC146"
+      },
+      ]
+    });
+    chart.render();
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/FlightsToTopTenDestinationsFromJFK').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsJFKToDestinations.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/FlightsToTopTenDestinationsFromEWR').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsEWRToDestinations.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/FlightsToTopTenDestinationsFromLGA').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsLGAToDestinations.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error)); 
+  }
+
+}
+
+@Pipe({ name: 'getValues' })
+export class GetValuesPipe implements PipeTransform {
+  transform(flightsToTopTenDestinations: Map<string, number>): any[] {
+    let ret = [];
+
+    Object.keys(flightsToTopTenDestinations).forEach(function (key) {
+      ret.push({ key: key, val: flightsToTopTenDestinations[key] })
+    });
+
+    return ret;
   }
 }
 
