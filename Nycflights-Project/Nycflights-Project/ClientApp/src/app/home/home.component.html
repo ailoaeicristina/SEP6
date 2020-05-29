@@ -142,4 +142,22 @@
       </tbody>
     </table>
 
+    <!--Feature 13 - Planes for each Airbus Model-->
+    <p *ngIf="!planesForEachAirbusModel"><em>Loading...</em></p>
+
+    <table class='table' *ngIf="planesForEachAirbusModel">
+      <thead>
+        <tr>
+          <th>Airbus Model</th>
+          <th>Number of planes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of planesForEachAirbusModel | getValues">
+          <td>{{ item.key }}</td>
+          <td>{{ item.val }}</td>
+        </tr>
+      </tbody>
+    </table>
+
   </body>

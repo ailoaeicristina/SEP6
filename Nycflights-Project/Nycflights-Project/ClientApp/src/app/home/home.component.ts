@@ -21,6 +21,7 @@ export class HomeComponent implements AfterViewInit {
   public meanDepartureAndArrivalDelaysForLGA: Map<string, string>;
   public manufacturersMoreThanTwoHundredPlanes: Map<string, number>;
   public flightsForManufacturersMoreThanTwoHundredPlanes: Map<string, number>;
+  public planesForEachAirbusModel: Map<string, number>;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
@@ -64,6 +65,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 12 - Flights for manufacturers with more than 200 planes
     this.loadFlightsForManufacturersWithMoreThanTwoHundredPlanes();
+
+    //Feature 13 - Planes for each Airbus model
+    this.loadPlanesForEachAirbusModel();
   }
 
   loadFlightsPerMonth() {
@@ -574,6 +578,12 @@ export class HomeComponent implements AfterViewInit {
   loadFlightsForManufacturersWithMoreThanTwoHundredPlanes() {
     this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/FlightsManufacturersMoreThanTwoHundredPlanes').subscribe(result => {
       this.flightsForManufacturersMoreThanTwoHundredPlanes = result;
+    }, error => console.error(error));
+  }
+
+  loadPlanesForEachAirbusModel() {
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/PlanesforAirbus').subscribe(result => {
+      this.planesForEachAirbusModel = result;
     }, error => console.error(error));
   }
 }
