@@ -14,6 +14,7 @@ export class HomeComponent implements AfterViewInit {
   public baseUrl: string;
 
   public flightsToTopTenDestinations: Map<string, number>;
+  public meanAirtimeForOrigins: Map<string, string>;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
@@ -30,6 +31,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 3 - Flights to top 10 destinations
     this.loadFlightToTopTenDestinations();
+
+    //Feature 4 - Mean airtime for origins
+    this.loadMeanAirtimeForOrigins();
   }
 
   loadFlightsPerMonth() {
@@ -295,15 +299,21 @@ export class HomeComponent implements AfterViewInit {
     }, error => console.error(error)); 
   }
 
+  loadMeanAirtimeForOrigins() {
+    this.http.get<Map<string, string>>(this.baseUrl + 'api/Nycflights/MeanAirtimeForOrigins').subscribe(result => {
+      this.meanAirtimeForOrigins = result;
+    }, error => console.error(error));
+  }
+
 }
 
 @Pipe({ name: 'getValues' })
 export class GetValuesPipe implements PipeTransform {
-  transform(flightsToTopTenDestinations: Map<string, number>): any[] {
+  transform(map: Map<string, number>): any[] {
     let ret = [];
 
-    Object.keys(flightsToTopTenDestinations).forEach(function (key) {
-      ret.push({ key: key, val: flightsToTopTenDestinations[key] })
+    Object.keys(map).forEach(function (key) {
+      ret.push({ key: key, val: map[key] })
     });
 
     return ret;
