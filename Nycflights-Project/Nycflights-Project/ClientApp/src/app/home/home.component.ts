@@ -44,6 +44,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 7 - Temperatures for JFK
     this.loadTemperaturesForJFK();
+
+    //Feature 8 - Daily mean temperature for JFK
+    this.loadDailyMeanTemperatureForJFK();
   }
 
   loadFlightsPerMonth() {
@@ -417,6 +420,41 @@ export class HomeComponent implements AfterViewInit {
     chart.render();
 
     this.http.get<Map<Date, number>>(this.baseUrl + 'api/Nycflights/TemperatureInCelsiusForJFK').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsJFK.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+  }
+
+  loadDailyMeanTemperatureForJFK() {
+    let dataPointsJFK = [];
+
+    let chart = new CanvasJS.Chart("chartContainer8", {
+      animationEnabled: true,
+      title: {
+        text: "Daily mean temperature for JFK"
+      },
+      axisX: {
+        title: "Date",
+      },
+      axisY: {
+        title: "Daily mean temperature"
+      },
+      data: [{
+        type: "scatter",
+        legendText: "JFK",
+        showInLegend: true,
+        dataPoints: dataPointsJFK,
+        color: "#2E86C1"
+      }]
+    });
+
+    chart.render();
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/DailyMeanTempInCelsiusForJFK').subscribe(result => {
 
       Object.keys(result).forEach(function (key) {
         dataPointsJFK.push({ label: key, y: result[key] })
