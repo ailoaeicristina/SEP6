@@ -47,6 +47,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 8 - Daily mean temperature for JFK
     this.loadDailyMeanTemperatureForJFK();
+
+    //Feature 9 - Daily mean temperature for origins
+    this.loadDailyMeanTemperatureForOrigins();
   }
 
   loadFlightsPerMonth() {
@@ -441,7 +444,7 @@ export class HomeComponent implements AfterViewInit {
         title: "Date",
       },
       axisY: {
-        title: "Daily mean temperature"
+        title: "Mean temperature"
       },
       data: [{
         type: "scatter",
@@ -458,6 +461,76 @@ export class HomeComponent implements AfterViewInit {
 
       Object.keys(result).forEach(function (key) {
         dataPointsJFK.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+  }
+
+  loadDailyMeanTemperatureForOrigins() {
+    let dataPointsJFK = [];
+    let dataPointsEWR = [];
+    let dataPointsLGA = [];
+
+    let chart = new CanvasJS.Chart("chartContainer9", {
+      animationEnabled: true,
+      title: {
+        text: "Daily mean temperature for origins"
+      },
+      axisX: {
+        title: "Date",
+      },
+      axisY: {
+        title: "Mean temperature"
+      },
+      data: [{
+        type: "scatter",
+        legendText: "JFK",
+        showInLegend: true,
+        dataPoints: dataPointsJFK,
+        color: "#2E86C1"
+      },
+      {
+        type: "scatter",
+        legendText: "EWR",
+        showInLegend: true,
+        dataPoints: dataPointsEWR,
+        color: "#C13B2E"
+      },
+      {
+        type: "scatter",
+        legendText: "LGA",
+        showInLegend: true,
+        dataPoints: dataPointsLGA,
+        color: "#2EC146"
+      },
+      ]
+    });
+
+    chart.render();
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/DailyMeanTempInCelsiusForJFK').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsJFK.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/DailyMeanTempInCelsiusForEWR').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsEWR.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/DailyMeanTempInCelsiusForLGA').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsLGA.push({ label: key, y: result[key] })
       });
 
       chart.render();
