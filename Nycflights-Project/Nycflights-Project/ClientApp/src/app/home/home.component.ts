@@ -19,7 +19,8 @@ export class HomeComponent implements AfterViewInit {
   public meanDepartureAndArrivalDelaysForJFK: Map<string, string>;
   public meanDepartureAndArrivalDelaysForEWR: Map<string, string>;
   public meanDepartureAndArrivalDelaysForLGA: Map<string, string>;
-  public manufacturersMoreThanTwoHundredPlanes: Map<string, number>
+  public manufacturersMoreThanTwoHundredPlanes: Map<string, number>;
+  public flightsForManufacturersMoreThanTwoHundredPlanes: Map<string, number>;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
@@ -60,6 +61,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 11 - Manufacturers with more than 200 planes
     this.loadManufacturersMoreThanTwoHundredPlanes();
+
+    //Feature 12 - Flights for manufacturers with more than 200 planes
+    this.loadFlightsForManufacturersWithMoreThanTwoHundredPlanes();
   }
 
   loadFlightsPerMonth() {
@@ -564,6 +568,12 @@ export class HomeComponent implements AfterViewInit {
   loadManufacturersMoreThanTwoHundredPlanes() {
     this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/ManufacturersMoreThanTwoHundredPlanes').subscribe(result => {
       this.manufacturersMoreThanTwoHundredPlanes = result;
+    }, error => console.error(error));
+  }
+
+  loadFlightsForManufacturersWithMoreThanTwoHundredPlanes() {
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/FlightsManufacturersMoreThanTwoHundredPlanes').subscribe(result => {
+      this.flightsForManufacturersMoreThanTwoHundredPlanes = result;
     }, error => console.error(error));
   }
 }
