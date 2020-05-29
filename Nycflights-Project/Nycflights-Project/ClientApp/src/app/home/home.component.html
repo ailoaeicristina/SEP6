@@ -9,7 +9,6 @@
     <div id="chartContainer2StackedPercentage" style="height: 400px; width: 600px; margin-left:auto;margin-right:auto;"></div>
 
     <!--Feature 3 - Top 10 destinations-->
-
     <p *ngIf="!flightsToTopTenDestinations"><em>Loading...</em></p>
 
     <table class='table' *ngIf="flightsToTopTenDestinations">
@@ -30,7 +29,6 @@
     <div id="chartContainer3" style="height: 400px; width: 600px; margin-left:auto;margin-right:auto;"></div>
 
     <!--Feature 4 - Mean airtime for origins-->
-
     <p *ngIf="!meanAirtimeForOrigins"><em>Loading...</em></p>
 
     <table class='table' *ngIf="meanAirtimeForOrigins">
@@ -47,4 +45,23 @@
         </tr>
       </tbody>
     </table>
+
+    <!--Feature 5 - Weather observations for origins-->
+    <p *ngIf="!weatherObservationsForOrigins"><em>Loading...</em></p>
+
+    <table class='table' *ngIf="weatherObservationsForOrigins">
+      <thead>
+        <tr>
+          <th>Origin</th>
+          <th>Number of weather observations</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of weatherObservationsForOrigins | getValues">
+          <td>{{ item.key }}</td>
+          <td>{{ item.val }}</td>
+        </tr>
+      </tbody>
+    </table>
+
   </body>

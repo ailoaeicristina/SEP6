@@ -15,6 +15,7 @@ export class HomeComponent implements AfterViewInit {
 
   public flightsToTopTenDestinations: Map<string, number>;
   public meanAirtimeForOrigins: Map<string, string>;
+  public weatherObservationsForOrigins: Map<string, number>;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
@@ -34,6 +35,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 4 - Mean airtime for origins
     this.loadMeanAirtimeForOrigins();
+
+    //Feature 5 - Weather observations for origins
+    this.loadWeatherObservationsForOrigins();
   }
 
   loadFlightsPerMonth() {
@@ -302,6 +306,12 @@ export class HomeComponent implements AfterViewInit {
   loadMeanAirtimeForOrigins() {
     this.http.get<Map<string, string>>(this.baseUrl + 'api/Nycflights/MeanAirtimeForOrigins').subscribe(result => {
       this.meanAirtimeForOrigins = result;
+    }, error => console.error(error));
+  }
+
+  loadWeatherObservationsForOrigins() {
+    this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/WeatherObservationsForOrigins').subscribe(result => {
+      this.weatherObservationsForOrigins = result;
     }, error => console.error(error));
   }
 
