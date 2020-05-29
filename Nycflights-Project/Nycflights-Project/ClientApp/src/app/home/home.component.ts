@@ -16,6 +16,9 @@ export class HomeComponent implements AfterViewInit {
   public flightsToTopTenDestinations: Map<string, number>;
   public meanAirtimeForOrigins: Map<string, string>;
   public weatherObservationsForOrigins: Map<string, number>;
+  public meanDepartureAndArrivalDelaysForJFK: Map<string, string>;
+  public meanDepartureAndArrivalDelaysForEWR: Map<string, string>;
+  public meanDepartureAndArrivalDelaysForLGA: Map<string, string>;
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     this.http = http;
@@ -50,6 +53,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 9 - Daily mean temperature for origins
     this.loadDailyMeanTemperatureForOrigins();
+
+    //Feature 10 - Departure and arrival delays for origins
+    this.loadDepartureAndArrivalDelaysForOrigins();
   }
 
   loadFlightsPerMonth() {
@@ -534,6 +540,20 @@ export class HomeComponent implements AfterViewInit {
       });
 
       chart.render();
+    }, error => console.error(error));
+  }
+
+  loadDepartureAndArrivalDelaysForOrigins() {
+    this.http.get<Map<string, string>>(this.baseUrl + 'api/Nycflights/MeanDepartureAndArrivalDelayForJFK').subscribe(result => {
+      this.meanDepartureAndArrivalDelaysForJFK = result;
+    }, error => console.error(error));
+
+    this.http.get<Map<string, string>>(this.baseUrl + 'api/Nycflights/MeanDepartureAndArrivalDelayForEWR').subscribe(result => {
+      this.meanDepartureAndArrivalDelaysForEWR = result;
+    }, error => console.error(error));
+
+    this.http.get<Map<string, string>>(this.baseUrl + 'api/Nycflights/MeanDepartureAndArrivalDelayForLGA').subscribe(result => {
+      this.meanDepartureAndArrivalDelaysForLGA = result;
     }, error => console.error(error));
   }
 

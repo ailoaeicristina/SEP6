@@ -76,4 +76,59 @@
     <!--Feature 9 - Daily mean temperature for origins-->
     <div id="chartContainer9" style="height: 500px; width:1000px; margin-left:auto;margin-right:auto;"></div>
 
+    <!--Feature 10 - Mean departure and arrival delays for origins-->
+    <p *ngIf="!meanDepartureAndArrivalDelaysForJFK"><em>Loading...</em></p>
+
+    <p>Delays for JFK</p>
+    <table class='table' *ngIf="meanDepartureAndArrivalDelaysForJFK">
+      <thead title="Delays for JFK">
+        <tr>
+          <th>Delay type</th>
+          <th>Value (hh:mm:ss)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of meanDepartureAndArrivalDelaysForJFK | getValues">
+          <td>{{ item.key }}</td>
+          <td>{{ item.val }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!meanDepartureAndArrivalDelaysForEWR"><em>Loading...</em></p>
+
+    <p>Delays for EWR</p>
+    <table class='table' *ngIf="meanDepartureAndArrivalDelaysForEWR">
+      <thead title="Delays for EWR">
+        <tr>
+          <th>Delay type</th>
+          <th>Value (hh:mm:ss)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of meanDepartureAndArrivalDelaysForEWR | getValues">
+          <td>{{ item.key }}</td>
+          <td>{{ item.val }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p *ngIf="!meanDepartureAndArrivalDelaysForLGA"><em>Loading...</em></p>
+
+    <p>Delays for LGA</p>
+    <table class='table' *ngIf="meanDepartureAndArrivalDelaysForLGA">
+      <thead title="Delays for LGA">
+        <tr>
+          <th>Delay type</th>
+          <th>Value (hh:mm:ss)</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of meanDepartureAndArrivalDelaysForLGA | getValues">
+          <td>{{ item.key }}</td>
+          <td>{{ item.val }}</td>
+        </tr>
+      </tbody>
+    </table>
+
   </body>
