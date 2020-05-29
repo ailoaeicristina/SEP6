@@ -41,6 +41,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 6 - Temperature attributes for origins
     this.loadTemperatureAttributesForOrigins();
+
+    //Feature 7 - Temperatures for JFK
+    this.loadTemperaturesForJFK();
   }
 
   loadFlightsPerMonth() {
@@ -382,6 +385,41 @@ export class HomeComponent implements AfterViewInit {
 
       Object.keys(result).forEach(function (key) {
         dataPointsLGA.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+  }
+
+  loadTemperaturesForJFK() {
+    let dataPointsJFK = [];
+
+    let chart = new CanvasJS.Chart("chartContainer7", {
+      animationEnabled: true,
+      title: {
+        text: "Temperatures registered for JFK"
+      },
+      axisX: {
+        title: "Date",
+      },
+      axisY: {
+        title: "Temperature in Celsius"
+      },
+      data: [{
+        type: "scatter",
+        legendText: "JFK",
+        showInLegend: true,
+        dataPoints: dataPointsJFK,
+        color: "#2E86C1"
+      }]
+    });
+
+    chart.render();
+
+    this.http.get<Map<Date, number>>(this.baseUrl + 'api/Nycflights/TemperatureInCelsiusForJFK').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsJFK.push({ label: key, y: result[key] })
       });
 
       chart.render();
