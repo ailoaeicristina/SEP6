@@ -38,6 +38,9 @@ export class HomeComponent implements AfterViewInit {
 
     //Feature 5 - Weather observations for origins
     this.loadWeatherObservationsForOrigins();
+
+    //Feature 6 - Temperature attributes for origins
+    this.loadTemperatureAttributesForOrigins();
   }
 
   loadFlightsPerMonth() {
@@ -312,6 +315,76 @@ export class HomeComponent implements AfterViewInit {
   loadWeatherObservationsForOrigins() {
     this.http.get<Map<string, number>>(this.baseUrl + 'api/Nycflights/WeatherObservationsForOrigins').subscribe(result => {
       this.weatherObservationsForOrigins = result;
+    }, error => console.error(error));
+  }
+
+  loadTemperatureAttributesForOrigins() {
+    let dataPointsJFK = [];
+    let dataPointsEWR = [];
+    let dataPointsLGA = [];
+
+    let chart = new CanvasJS.Chart("chartContainer6", {
+      animationEnabled: true,
+      title: {
+        text: "Temperature attributes for origins"
+      },
+      axisX: {
+        title: "Date",
+      },
+      axisY: {
+        title: "Temperature in Celsius"
+      },
+      data: [{
+        type: "scatter",
+        legendText: "JFK",
+        showInLegend: true,
+        dataPoints: dataPointsJFK,
+        color: "#2E86C1"
+      },
+      {
+        type: "scatter",
+        legendText: "EWR",
+        showInLegend: true,
+        dataPoints: dataPointsEWR,
+        color: "#C13B2E"
+      },
+      {
+        type: "scatter",
+        legendText: "LGA",
+        showInLegend: true,
+        dataPoints: dataPointsLGA,
+        color: "#2EC146"
+      },
+      ]
+    });
+
+    chart.render();
+
+    this.http.get<Map<Date, number>>(this.baseUrl + 'api/Nycflights/TemperatureInCelsiusForJFK').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsJFK.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+
+    this.http.get<Map<Date, number>>(this.baseUrl + 'api/Nycflights/TemperatureInCelsiusForEWR').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsEWR.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
+    }, error => console.error(error));
+
+    this.http.get<Map<Date, number>>(this.baseUrl + 'api/Nycflights/TemperatureInCelsiusForLGA').subscribe(result => {
+
+      Object.keys(result).forEach(function (key) {
+        dataPointsLGA.push({ label: key, y: result[key] })
+      });
+
+      chart.render();
     }, error => console.error(error));
   }
 
