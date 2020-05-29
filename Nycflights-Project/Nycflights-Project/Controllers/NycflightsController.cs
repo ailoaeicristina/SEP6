@@ -31,7 +31,7 @@ namespace Nycflights_Project.Controllers
             var context = new Nycflights13DBContext();
 
             return context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("JFK")).Select(f => f.Month).ToList()
-                .GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
+                .GroupBy(m => m).OrderBy(g => g.Key).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
 
         //2.2. GET: api/Nycflights/FlightsPerMonthForEWR
@@ -41,7 +41,7 @@ namespace Nycflights_Project.Controllers
             var context = new Nycflights13DBContext();
 
             return context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("EWR")).Select(f => f.Month).ToList()
-                .GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
+                .GroupBy(m => m).OrderBy(g => g.Key).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
 
         //2.3. GET: api/Nycflights/FlightsPerMonthForLGA
@@ -51,7 +51,7 @@ namespace Nycflights_Project.Controllers
             var context = new Nycflights13DBContext();
 
             return context.Flights.Where(f => !string.IsNullOrEmpty(f.Origin) && f.Origin.Equals("LGA")).Select(f => f.Month).ToList()
-                .GroupBy(m => m).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
+                .GroupBy(m => m).OrderBy(g => g.Key).ToDictionary(g => monthsByNumber[g.Key], g => g.Count());
         }
         #endregion
 
