@@ -77,7 +77,6 @@
     <div id="chartContainer9" style="height: 500px; width:1000px; margin-left:auto;margin-right:auto;"></div>
 
     <!--Feature 10 - Mean departure and arrival delays for origins-->
-
     <table class='table' *ngIf="meanDepartureAndArrivalDelaysForJFK && meanDepartureAndArrivalDelaysForEWR && meanDepartureAndArrivalDelaysForLGA">
       <thead>
         <tr>
@@ -101,6 +100,24 @@
 
         <tr *ngFor="let item of meanDepartureAndArrivalDelaysForLGA | getValues">
           <td>LGA</td>
+          <td>{{ item.key }}</td>
+          <td>{{ item.val }}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <!--Feature 11 - Manufacturers with more than 200 planes-->
+    <p *ngIf="!manufacturersMoreThanTwoHundredPlanes"><em>Loading...</em></p>
+
+    <table class='table' *ngIf="manufacturersMoreThanTwoHundredPlanes">
+      <thead>
+        <tr>
+          <th>Manufacturer</th>
+          <th>Number of planes</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let item of manufacturersMoreThanTwoHundredPlanes | getValues">
           <td>{{ item.key }}</td>
           <td>{{ item.val }}</td>
         </tr>
