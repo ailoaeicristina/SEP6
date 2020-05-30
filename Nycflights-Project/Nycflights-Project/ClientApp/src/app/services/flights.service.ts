@@ -29,6 +29,42 @@ export class FlightsService {
             );
     }
 
+    getFlightsPerMonthFromJFK(): Observable<any[] | Map<string, number>> {
+        return this.http
+            .get<Map<string, number>>(
+                `${this.flightsUrl}/flightspermonthforjfk`,
+                this.httpOptions
+            )
+            .pipe(
+                tap((_) => console.log(`Fetched flights!`)),
+                catchError(this.handleError(`getFlightsPerMonth()`, []))
+            );
+    }
+
+    getFlightsPerMonthFromEWR(): Observable<any[] | Map<string, number>> {
+        return this.http
+            .get<Map<string, number>>(
+                `${this.flightsUrl}/flightspermonthforEWR`,
+                this.httpOptions
+            )
+            .pipe(
+                tap((_) => console.log(`Fetched flights!`)),
+                catchError(this.handleError(`getFlightsPerMonth()`, []))
+            );
+    }
+
+    getFlightsPerMonthFromLGA(): Observable<any[] | Map<string, number>> {
+        return this.http
+            .get<Map<string, number>>(
+                `${this.flightsUrl}/flightspermonthforLGA`,
+                this.httpOptions
+            )
+            .pipe(
+                tap((_) => console.log(`Fetched flights!`)),
+                catchError(this.handleError(`getFlightsPerMonth()`, []))
+            );
+    }
+
     /**
      * Handle Http operation that failed.
      * Let the app continue.
