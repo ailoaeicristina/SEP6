@@ -5,10 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './home.component.html'
+  templateUrl: './flights.component.html'
 })
 
-export class HomeComponent implements AfterViewInit {
+export class FlightsComponent implements AfterViewInit {
 
   public http: HttpClient;
   public baseUrl: string;
