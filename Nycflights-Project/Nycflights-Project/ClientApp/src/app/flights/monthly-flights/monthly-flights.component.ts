@@ -20,13 +20,7 @@ export class MonthlyFlightsComponent implements OnInit {
 
     ngOnInit(): void {
         this.loadData();
-        this.createChartFrequency();
-        this.createChartStacked();
-        this.createChartStackedPercentage();
-
-        this.chartFrequency.render();
-        this.chartStacked.render();
-        this.chartStackedPercentage.render();
+        
     }
 
     loadData() {
@@ -34,19 +28,29 @@ export class MonthlyFlightsComponent implements OnInit {
             Object.keys(dataJFK).forEach((key) => {
                 this.dataPointsJFK.push({ label: key, y: dataJFK[key] });
             });
-        });
+            this.flightsService.getFlightsPerMonthFromEWR().subscribe((dataEWR) => {
+                Object.keys(dataEWR).forEach((key) => {
+                    this.dataPointsEWR.push({ label: key, y: dataEWR[key] });
+                });
+                this.flightsService.getFlightsPerMonthFromLGA().subscribe((dataLGA) => {
+                    Object.keys(dataLGA).forEach((key) => {
+                        this.dataPointsLGA.push({ label: key, y: dataLGA[key] });
+                    });
+                    this.createChartFrequency();
+                    this.createChartStacked();
+                    this.createChartStackedPercentage();
 
-        this.flightsService.getFlightsPerMonthFromEWR().subscribe((dataEWR) => {
-            Object.keys(dataEWR).forEach((key) => {
-                this.dataPointsEWR.push({ label: key, y: dataEWR[key] });
+                    this.chartFrequency.render();
+                    this.chartStacked.render();
+                    this.chartStackedPercentage.render();
+                });
+                
             });
         });
 
-        this.flightsService.getFlightsPerMonthFromLGA().subscribe((dataLGA) => {
-            Object.keys(dataLGA).forEach((key) => {
-                this.dataPointsLGA.push({ label: key, y: dataLGA[key] });
-            });
-        });
+        
+
+        
     }
 
     createChartStackedPercentage() {
