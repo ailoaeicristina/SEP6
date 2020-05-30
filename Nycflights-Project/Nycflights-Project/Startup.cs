@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
+using Microsoft.AspNetCore.Cors;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.Extensions.Configuration;
@@ -20,11 +21,11 @@ namespace Nycflights_Project
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddCors();
-            // services.AddCors(options =>
-            // {
-            //     options.AddPolicy("Access-Control-Allow-Origin", options => options.AllowAnyOrigin());
-            // });
+            
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin());
+            });
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
@@ -38,9 +39,7 @@ namespace Nycflights_Project
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            app.UseCors(
-                options => options.AllowAnyOrigin()
-            );
+            app.UseCors(builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin().AllowCredentials());
 
             if (env.IsDevelopment())
             {
@@ -52,8 +51,6 @@ namespace Nycflights_Project
                 app.UseHsts();
             }
 
-            // app.UseCors(options => options.AllowAnyOrigin());
-            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

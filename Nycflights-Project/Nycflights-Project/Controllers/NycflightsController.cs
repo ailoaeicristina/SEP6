@@ -6,7 +6,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Cors;
 namespace Nycflights_Project.Controllers
 {
-    [EnableCors("AllowAll")]
+    // [EnableCors()]
     [Route("api/[controller]")]
     [ApiController]
     public class NycflightsController : Controller
