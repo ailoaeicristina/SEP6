@@ -2,17 +2,18 @@
 
   <body>
     <!--Feature 1 - Flights per month-->
-    <div id="chartContainer1" style="height: 400px; width: 600px; margin-left:auto;margin-right:auto;"></div>
+    <div id="chartContainer1" style="height: 350px; width: 550px; margin-top: 30px;"></div>
 
     <!--Feature 2 - Flights per month from origins-->
-    <div id="chartContainer2Frequency" style="height: 400px; width: 600px; margin-left:auto;margin-right:auto;"></div>
-    <div id="chartContainer2Stacked" style="height: 400px; width: 600px; margin-left:auto;margin-right:auto;"></div>
-    <div id="chartContainer2StackedPercentage" style="height: 400px; width: 600px; margin-left:auto;margin-right:auto;"></div>
+    <div id="chartContainer2Frequency" style="height: 350px; width: 550px; margin-top: 30px;"></div>
+    <div id="chartContainer2Stacked" style="height: 350px; width: 550px; margin-top: 30px;"></div>
+    <div id="chartContainer2StackedPercentage" style="height: 350px; width: 550px; margin-top: 30px;"></div>
 
     <!--Feature 3 - Top 10 destinations-->
     <p *ngIf="!flightsToTopTenDestinations"><em>Loading...</em></p>
 
-    <table class='table' *ngIf="flightsToTopTenDestinations">
+    <table class='table' *ngIf="flightsToTopTenDestinations" style="margin-top: 30px;">
+      <caption>Number of flights to top 10 destinations</caption>
       <thead>
         <tr>
           <th>Destination</th>
@@ -27,12 +28,13 @@
       </tbody>
     </table>
 
-    <div id="chartContainer3" style="height: 400px; width: 600px; margin-left:auto;margin-right:auto;"></div>
+    <div id="chartContainer3" style="height: 350px; width: 550px; margin-top: 30px;"></div>
 
     <!--Feature 4 - Mean airtime for origins-->
     <p *ngIf="!meanAirtimeForOrigins"><em>Loading...</em></p>
 
-    <table class='table' *ngIf="meanAirtimeForOrigins">
+    <table class='table' *ngIf="meanAirtimeForOrigins" style="margin-top: 30px;">
+      <caption>Mean airtime for origins</caption>
       <thead>
         <tr>
           <th>Origin</th>
@@ -47,38 +49,10 @@
       </tbody>
     </table>
 
-    <!--Feature 5 - Weather observations for origins-->
-    <p *ngIf="!weatherObservationsForOrigins"><em>Loading...</em></p>
-
-    <table class='table' *ngIf="weatherObservationsForOrigins">
-      <thead>
-        <tr>
-          <th>Origin</th>
-          <th>Number of weather observations</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of weatherObservationsForOrigins | getValues">
-          <td>{{ item.key }}</td>
-          <td>{{ item.val }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!--Feature 6 - Temperature attributes for origins-->
-    <div id="chartContainer6" style="height: 500px; width:1000px; margin-left:auto;margin-right:auto;"></div>
-
-    <!--Feature 7 - Temperatures for JFK-->
-    <div id="chartContainer7" style="height: 500px; width:1000px; margin-left:auto;margin-right:auto;"></div>
-
-    <!--Feature 8 - Daily mean temperature for JFK-->
-    <div id="chartContainer8" style="height: 500px; width:1000px; margin-left:auto;margin-right:auto;"></div>
-
-    <!--Feature 9 - Daily mean temperature for origins-->
-    <div id="chartContainer9" style="height: 500px; width:1000px; margin-left:auto;margin-right:auto;"></div>
-
     <!--Feature 10 - Mean departure and arrival delays for origins-->
-    <table class='table' *ngIf="meanDepartureAndArrivalDelaysForJFK && meanDepartureAndArrivalDelaysForEWR && meanDepartureAndArrivalDelaysForLGA">
+    <table class='table' *ngIf="meanDepartureAndArrivalDelaysForJFK && meanDepartureAndArrivalDelaysForEWR && meanDepartureAndArrivalDelaysForLGA"
+           style="margin-top: 30px;">
+      <caption>Mean departure and arrival delays for origins</caption>
       <thead>
         <tr>
           <th>Origin</th>
@@ -101,60 +75,6 @@
 
         <tr *ngFor="let item of meanDepartureAndArrivalDelaysForLGA | getValues">
           <td>LGA</td>
-          <td>{{ item.key }}</td>
-          <td>{{ item.val }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!--Feature 11 - Manufacturers with more than 200 planes-->
-    <p *ngIf="!manufacturersMoreThanTwoHundredPlanes"><em>Loading...</em></p>
-
-    <table class='table' *ngIf="manufacturersMoreThanTwoHundredPlanes">
-      <thead>
-        <tr>
-          <th>Manufacturer</th>
-          <th>Number of planes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of manufacturersMoreThanTwoHundredPlanes | getValues">
-          <td>{{ item.key }}</td>
-          <td>{{ item.val }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!--Feature 12 - Flights for manufacturers with more than 200 planes-->
-    <p *ngIf="!flightsForManufacturersMoreThanTwoHundredPlanes"><em>Loading...</em></p>
-
-    <table class='table' *ngIf="flightsForManufacturersMoreThanTwoHundredPlanes">
-      <thead>
-        <tr>
-          <th>Manufacturer</th>
-          <th>Number of flights responsible</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of flightsForManufacturersMoreThanTwoHundredPlanes | getValues">
-          <td>{{ item.key }}</td>
-          <td>{{ item.val }}</td>
-        </tr>
-      </tbody>
-    </table>
-
-    <!--Feature 13 - Planes for each Airbus Model-->
-    <p *ngIf="!planesForEachAirbusModel"><em>Loading...</em></p>
-
-    <table class='table' *ngIf="planesForEachAirbusModel">
-      <thead>
-        <tr>
-          <th>Airbus Model</th>
-          <th>Number of planes</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of planesForEachAirbusModel | getValues">
           <td>{{ item.key }}</td>
           <td>{{ item.val }}</td>
         </tr>
