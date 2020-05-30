@@ -3,9 +3,10 @@ using Nycflights_Project.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using Microsoft.AspNetCore.Cors;
 namespace Nycflights_Project.Controllers
 {
+    [EnableCors("AllowAll")]
     [Route("api/[controller]")]
     [ApiController]
     public class NycflightsController : Controller
@@ -13,7 +14,7 @@ namespace Nycflights_Project.Controllers
         private Dictionary<int, string> monthsByNumber = new Dictionary<int, string>()
             { {1, "Jan" }, {2, "Feb"}, {3, "Mar"},  {4, "Apr"},  {5, "May"},  {6, "Jun"},
                 {7, "Jul"},  {8, "Aug"},  {9, "Sep"},  {10, "Oct"},  {11, "Nov"},  {12, "Dec"}};
-       
+
         #region Flights per month
         //1. GET: api/Nycflights/FlightsPerMonth
         [HttpGet("[action]")]
@@ -181,12 +182,12 @@ namespace Nycflights_Project.Controllers
 
         //7. GET: api/Nycflights/TemperatureInCelsiusForJFK
         [HttpGet("[action]")]
-        public Dictionary<DateTime,float> TemperatureInCelsiusForJFK()
+        public Dictionary<DateTime, float> TemperatureInCelsiusForJFK()
         {
-            var context = new Nycflights13DBContext();  
-            
+            var context = new Nycflights13DBContext();
+
             return context.Weather.Where(w => !string.IsNullOrEmpty(w.Origin) && w.Origin.Equals("JFK"))
-                .Select(w => new { w.Time_hour, w.Temp}).ToDictionary(g => g.Time_hour, g=> (g.Temp - 32) * 5 / 9);
+                .Select(w => new { w.Time_hour, w.Temp }).ToDictionary(g => g.Time_hour, g => (g.Temp - 32) * 5 / 9);
         }
 
         //8. GET: api/Nycflights/DailyMeanTempInCelsiusForJFK
@@ -307,7 +308,7 @@ namespace Nycflights_Project.Controllers
             Dictionary<string, int> countByTailNum = context.Flights.Select(f => f.Tailnum).ToList().GroupBy(m => m).ToDictionary(g => g.Key, g => g.Count());
 
             foreach (KeyValuePair<string, int> pair in manufacturersMoreThanTwoHundredPlanes)
-            { 
+            {
                 List<string> tailNums = context.Planes.Where(p => p.Manufacturer.Equals(pair.Key)).Select(p => p.Tailnum).ToList();
                 int flights = 0;
                 int flightsForTailNum = 0;
@@ -315,7 +316,7 @@ namespace Nycflights_Project.Controllers
                 foreach (string tailNum in tailNums)
                 {
                     countByTailNum.TryGetValue(tailNum, out flightsForTailNum);
-                    flights += flightsForTailNum; 
+                    flights += flightsForTailNum;
                 }
 
                 flightsManufacturersMoreThanTwoHundredPlanes.Add(pair.Key, flights);

@@ -20,6 +20,12 @@ namespace Nycflights_Project
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors();
+            // services.AddCors(options =>
+            // {
+            //     options.AddPolicy("Access-Control-Allow-Origin", options => options.AllowAnyOrigin());
+            // });
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
             // In production, the Angular files will be served from this directory
@@ -32,6 +38,10 @@ namespace Nycflights_Project
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            app.UseCors(
+                options => options.AllowAnyOrigin()
+            );
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
@@ -42,6 +52,8 @@ namespace Nycflights_Project
                 app.UseHsts();
             }
 
+            // app.UseCors(options => options.AllowAnyOrigin());
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
             app.UseSpaStaticFiles();

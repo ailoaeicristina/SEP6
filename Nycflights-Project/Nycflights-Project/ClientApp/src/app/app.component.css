@@ -12,3 +12,7 @@ mat-sidenav-container {
 mat-expansion-panel {
     box-shadow: none !important;
 }
+
+.clickable {
+    cursor: pointer;
+}

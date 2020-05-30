@@ -16,11 +16,11 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-list role="list">
-                    <mat-list-item role="listitem">Total Flights/Month</mat-list-item>
-                    <mat-list-item role="listitem">Monthly Flights/Origin</mat-list-item>
-                    <mat-list-item role="listitem">Top 10 Destinations</mat-list-item>
-                    <mat-list-item role="listitem">Mean Air Time</mat-list-item>
-                    <mat-list-item role="listitem">Men Dep. & Arrival Delay</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="total-flights">Total Flights/Month</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="monthly-flights">Monthly Flights/Origin</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="top-destinations">Top 10 Destinations</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="mean-air-time">Mean Air Time</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="mean-delay">Mean Dep. & Arrival Delay</mat-list-item>
                 </mat-list>
             </mat-expansion-panel>
             <mat-expansion-panel>
@@ -37,8 +37,8 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-list role="list">
-                    <mat-list-item role="listitem">All Measured Temperatures</mat-list-item>
-                    <mat-list-item role="listitem">Daily Mean Temperatures</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="all-temperatures">All Measured Temperatures</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="daily-mean-temp">Daily Mean Temperatures</mat-list-item>
                 </mat-list>
             </mat-expansion-panel>
             <mat-expansion-panel>
@@ -55,9 +55,9 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                     <mat-list role="list">
-                    <mat-list-item role="listitem">Big Manufacturers</mat-list-item>
-                    <mat-list-item role="listitem">Flights/Big Manufacturers</mat-list-item>
-                    <mat-list-item role="listitem">Air Bus Models</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="big-manufacturers">Big Manufacturers</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="flights-per-manufacturer">Flights/Big Manufacturers</mat-list-item>
+                    <mat-list-item role="listitem" class="clickable" routerLink="airbus-models">Air Bus Models</mat-list-item>
                 </mat-list>
             </mat-expansion-panel>
         </mat-accordion>
@@ -65,7 +65,7 @@
     
     <mat-sidenav-content>
         <div class="container">
-            Main content
+            <router-outlet></router-outlet>
         </div>
     </mat-sidenav-content>
 </mat-sidenav-container>
